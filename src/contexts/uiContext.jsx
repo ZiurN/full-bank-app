@@ -1,12 +1,14 @@
 import {createContext} from "react";
 /** Router */
-import {Route, Routes, useLocation} from "react-router-dom";
+import {Route, Routes, useLocation, Link, useNavigate} from "react-router-dom";
 /** UI Bootstrap Components */
 import Container from 'react-bootstrap/Container';
 import Modal from 'react-bootstrap/Modal';
 import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
+import Navbar from 'react-bootstrap/Navbar';
 /** UI Custom components */
-import NavBar from '../components/navbar';
+import MainNavBar from '../components/mainNavbar';
 /** UI Custom Pages */
 import Home from '../pages/home';
 import CreateAccount from '../pages/createAccount';
@@ -22,7 +24,9 @@ const UiContextProvider = ({children}) => {
 		Route,
 		Routes,
 		useLocation,
-		NavBar,
+		Link,
+		useNavigate,
+		MainNavBar,
 		Home,
 		CreateAccount,
 		Deposit,
@@ -31,7 +35,9 @@ const UiContextProvider = ({children}) => {
 		AllData,
 		Card,
 		Modal,
-		Container
+		Container,
+		Button,
+		Navbar
 	};
 	return (
 		<UiContext.Provider value={contextValue}>

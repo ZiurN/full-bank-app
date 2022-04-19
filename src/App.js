@@ -13,7 +13,7 @@ function App() {
 	}, [location]);
 	return (
 		<uiCtx.Container>
-			<uiCtx.NavBar/>
+			<uiCtx.MainNavBar/>
 			<uiCtx.Routes>
 				<uiCtx.Route path="/" exact element={<uiCtx.Home />} />
 				<uiCtx.Route path="/create-account" element={<uiCtx.CreateAccount/>} />
