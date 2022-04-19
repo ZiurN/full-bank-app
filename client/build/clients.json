@@ -1,0 +1,18 @@
+{
+    "data": [
+        {
+           	"name": "abel",
+			"email": "abel@mit.edu",
+			"password": "secret",
+			"balance": 100,
+			"image": true
+        },
+        {
+			"name": "jeferson",
+			"email": "jefryruiz@gmail.com",
+			"password": "jef123456",
+			"balance": 1500,
+			"image": true
+        }
+    ]
+}
