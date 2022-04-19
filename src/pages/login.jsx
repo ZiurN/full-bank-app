@@ -56,16 +56,11 @@ function Login () {
 								onChange={e => setPassword(e.currentTarget.value)} />
 						</div>
 						<button type="submit" className="btn btn-primary btn-bank" onClick={(e) => {handleLogin(e)}}>Login</button>
-						<uiCtx.Modal show={loginError}>
-							<uiCtx.Card className="text-center" bg='warning'>
-								<uiCtx.Card.Body>
-									<uiCtx.Card.Text>
-										{loginErrorMessage}
-									</uiCtx.Card.Text>
-									<uiCtx.Button variant="light" onClick={closeModal}>Retry</uiCtx.Button>
-								</uiCtx.Card.Body>
-							</uiCtx.Card>
-						</uiCtx.Modal>
+						<uiCtx.UiModal
+							show={loginError}
+							type='warning'
+							text={loginErrorMessage}
+							children={<uiCtx.Button variant="light" onClick={closeModal}>Retry</uiCtx.Button>} />
 					</form>
 				</uiCtx.Card.Body>
 			</uiCtx.Card>

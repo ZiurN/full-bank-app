@@ -1,7 +1,5 @@
 import {useState, createContext, useCallback, useEffect} from "react";
 import {Navigate, useNavigate} from "react-router-dom";
-import '../App.css';
-import {Route, Routes, useLocation} from "react-router-dom";
 
 const UserContext = createContext();
 const UserContextProvider = ({children}) => {

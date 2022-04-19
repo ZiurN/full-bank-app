@@ -3,7 +3,6 @@ import {createContext} from "react";
 import {Route, Routes, useLocation, Link, useNavigate, Navigate} from "react-router-dom";
 /** UI Bootstrap Components */
 import Container from 'react-bootstrap/Container';
-import Modal from 'react-bootstrap/Modal';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Navbar from 'react-bootstrap/Navbar';
@@ -13,6 +12,7 @@ import Stack from 'react-bootstrap/Stack';
 import ListGroup from 'react-bootstrap/ListGroup';
 /** UI Custom components */
 import MainNavBar from '../components/mainNavbar';
+import UiModal from '../components/uiModal';
 /** UI Custom Pages */
 import Home from '../pages/home';
 import CreateAccount from '../pages/createAccount';
@@ -39,7 +39,7 @@ const UiContextProvider = ({children}) => {
 		Login,
 		AllData,
 		Card,
-		Modal,
+		UiModal,
 		Container,
 		Button,
 		Navbar,

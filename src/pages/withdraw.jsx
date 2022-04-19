@@ -79,16 +79,11 @@ function Withdraw () {
 					</form>
 				</uiCtx.Card.Body>
 			</uiCtx.Card>
-			<uiCtx.Modal show={withdrawSuccess}>
-				<uiCtx.Card className="text-center" bg='success' text='white'>
-					<uiCtx.Card.Body>
-						<uiCtx.Card.Text>
-							Withdraw Successfull!
-						</uiCtx.Card.Text>
-						<uiCtx.Button variant="light" onClick={closeModal}>Cool!</uiCtx.Button>
-					</uiCtx.Card.Body>
-				</uiCtx.Card>
-			</uiCtx.Modal>
+			<uiCtx.UiModal
+				show={withdrawSuccess}
+				type='success'
+				text={'Withdraw Successfull!'}
+				children={<uiCtx.Button variant="light" onClick={closeModal}>Cool!</uiCtx.Button>}/>
 		</div>
 	);
 }

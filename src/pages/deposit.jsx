@@ -73,16 +73,11 @@ function Deposit () {
 					</form>
 				</uiCtx.Card.Body>
 			</uiCtx.Card>
-			<uiCtx.Modal show={depositSuccess}>
-				<uiCtx.Card className="text-center" bg='success' text='white'>
-					<uiCtx.Card.Body>
-						<uiCtx.Card.Text>
-							Deposit Successfull!
-						</uiCtx.Card.Text>
-						<uiCtx.Button variant="light" onClick={closeModal}>Cool!</uiCtx.Button>
-					</uiCtx.Card.Body>
-				</uiCtx.Card>
-			</uiCtx.Modal>
+			<uiCtx.UiModal
+				show={depositSuccess}
+				type='success'
+				text={'Deposit Successfull!'}
+				children={<uiCtx.Button variant="light" onClick={closeModal}>Cool!</uiCtx.Button>}/>
 		</div>
 	);
 }

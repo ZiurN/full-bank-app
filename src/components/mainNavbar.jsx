@@ -32,15 +32,7 @@ function MainNavBar () {
 				{validUser && (<uiCtx.Link className="nav-link nav-link-hover" to="/all-data" title="See a general overview of your account" >All Data</uiCtx.Link>)}
 				{validUser && (<uiCtx.Button className="nav-link nav-link-hover" variant="light" onClick={handleLogout} title="Sign out of your account">Logout</uiCtx.Button>)}
 			</uiCtx.Container>
-			<uiCtx.Modal show={showModal}>
-				<uiCtx.Card className="text-center" bg='success' text='white'>
-					<uiCtx.Card.Body>
-						<uiCtx.Card.Text>
-							Have a nice day!
-						</uiCtx.Card.Text>
-					</uiCtx.Card.Body>
-				</uiCtx.Card>
-			</uiCtx.Modal>
+			<uiCtx.UiModal show={showModal} type='success' text='Have a nice day!'/>
 		</uiCtx.Navbar>
 	);
 }

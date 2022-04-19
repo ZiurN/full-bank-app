@@ -22,24 +22,8 @@ function App() {
 				<uiCtx.Route path="/withdraw"  element={<uiCtx.Withdraw/>} />
 				<uiCtx.Route path="/all-data" element={<uiCtx.AllData/>} />
 			</uiCtx.Routes>
-			<uiCtx.Modal show={ctx.loginSuccess}>
-				<uiCtx.Card className="text-center" bg='success' text='white'>
-					<uiCtx.Card.Body>
-						<uiCtx.Card.Text>
-							Login Successfully!
-						</uiCtx.Card.Text>
-					</uiCtx.Card.Body>
-				</uiCtx.Card>
-			</uiCtx.Modal>
-			<uiCtx.Modal show={ctx.clientCreated}>
-				<uiCtx.Card className="text-center" bg='success' text='white'>
-					<uiCtx.Card.Body>
-						<uiCtx.Card.Text>
-							Account Created!
-						</uiCtx.Card.Text>
-					</uiCtx.Card.Body>
-				</uiCtx.Card>
-			</uiCtx.Modal>
+			<uiCtx.UiModal show={ctx.loginSuccess} type='success' text='Login Successfully!'/>
+			<uiCtx.UiModal show={ctx.clientCreated} type='success' text='Account Created!'/>
 		</uiCtx.Container>
 	);
 }
