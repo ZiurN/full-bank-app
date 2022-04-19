@@ -1,14 +1,11 @@
 import {useState, useEffect, useContext} from 'react';
 import {UserContext} from '../contexts/userContext';
-import Card from 'react-bootstrap/Card';
-import Alert from 'react-bootstrap/Alert';
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
-import {Navigate, useNavigate} from "react-router-dom";
+import {UiContext} from '../contexts/uiContext';
 
 function Deposit () {
 	const ctx = useContext(UserContext);
-	const navigate = useNavigate();
+	const uiCtx = useContext(UiContext);
+	const navigate = uiCtx.useNavigate();
 	const [depositAmount, setDepositAmount] = useState(0);
 	const [depositSuccess, setDepositSuccess] = useState(false);
 	const [validAmount, setValidAmount] = useState(false);
@@ -23,7 +20,7 @@ function Deposit () {
 	}, [validAmount]);
 	if(!ctx.validUser) {
 		navigate("/");
-		return (<Navigate to="/"/>);
+		return (<uiCtx.Navigate to="/"/>);
 	}
 	function validateAmountInput (e) {
 		const regexp = /\d{1,}/;
@@ -56,11 +53,11 @@ function Deposit () {
 	}
 	return (
 		<div style={{ display: 'flex', justifyContent: 'center' }}>
-			<Card style={{ width: '36rem' }}>
-				<Card.Body>
-					<Card.Title>
+			<uiCtx.Card style={{ width: '36rem' }}>
+				<uiCtx.Card.Body>
+					<uiCtx.Card.Title>
 						Deposit
-					</Card.Title>
+					</uiCtx.Card.Title>
 					<form>
 						<div className="mb-3">
 							<label htmlFor="name" className="form-label">Amount</label>
@@ -70,22 +67,22 @@ function Deposit () {
 								className="form-control"
 								id="amount"
 								onChange={e => validateAmountInput(e)} />
-							{(!validAmount && showAmountError) && <Alert className="alert alert-danger">{amountError}</Alert>}
+							{(!validAmount && showAmountError) && <uiCtx.Alert className="alert alert-danger">{amountError}</uiCtx.Alert>}
 						</div>
 						<button type="submit" className="btn btn-primary btn-bank" onClick={(e) => handleDeposit(e)} disabled={disabledSummitBtn}>Make deposit</button>
 					</form>
-				</Card.Body>
-			</Card>
-			<Modal show={depositSuccess}>
-				<Card className="text-center" bg='success' text='white'>
-					<Card.Body>
-						<Card.Text>
+				</uiCtx.Card.Body>
+			</uiCtx.Card>
+			<uiCtx.Modal show={depositSuccess}>
+				<uiCtx.Card className="text-center" bg='success' text='white'>
+					<uiCtx.Card.Body>
+						<uiCtx.Card.Text>
 							Deposit Successfull!
-						</Card.Text>
-						<Button variant="light" onClick={closeModal}>Cool!</Button>
-					</Card.Body>
-				</Card>
-			</Modal>
+						</uiCtx.Card.Text>
+						<uiCtx.Button variant="light" onClick={closeModal}>Cool!</uiCtx.Button>
+					</uiCtx.Card.Body>
+				</uiCtx.Card>
+			</uiCtx.Modal>
 		</div>
 	);
 }

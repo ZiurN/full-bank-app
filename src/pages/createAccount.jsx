@@ -1,7 +1,6 @@
-import { useState, useEffect, useContext } from 'react';
-import Card from 'react-bootstrap/Card';
-import Alert from 'react-bootstrap/Card';
-import { UserContext } from '../contexts/userContext';
+import {useState, useEffect, useContext} from 'react';
+import {UserContext} from '../contexts/userContext';
+import {UiContext} from '../contexts/uiContext';
 
 function CreateAccount () {
 	const [showNameError, setShowNameError] = useState(false);
@@ -17,6 +16,7 @@ function CreateAccount () {
 	const [passwordErrMessage, setPasswordErrMessage] = useState(true);
 	const [createButtonText, setCreateButtonText] = useState('Create Account');
 	const ctx = useContext(UserContext);
+	const uiCtx = useContext(UiContext);
 	useEffect(() => {
 		function checkToEnableSummitBtn () {
 			setDisabledSummitBtn(!nameValid || !emailValid || !passwordValid);
@@ -76,9 +76,9 @@ function CreateAccount () {
 	}
 	return (
 		<div style={{ display: 'flex', justifyContent: 'center' }}>
-			<Card style={{ width: '36rem' }}>
-				<Card.Body>
-					<Card.Title>Welcome to the BadBank</Card.Title>
+			<uiCtx.Card style={{ width: '36rem' }}>
+				<uiCtx.Card.Body>
+					<uiCtx.Card.Title>Welcome to the BadBank</uiCtx.Card.Title>
 					<form>
 						<div className="mb-3">
 							<label htmlFor="name" className="form-label">Name</label>
@@ -90,7 +90,7 @@ function CreateAccount () {
 								aria-describedby="nameHelp"
 								onChange={e => validateName(e.currentTarget.value)}
 								onBlur={e => validateName(name)} />
-							{(!nameValid && showNameError) && <Alert className="alert alert-danger">The name is mandatory</Alert>}
+							{(!nameValid && showNameError) && <uiCtx.Alert className="alert alert-danger">The name is mandatory</uiCtx.Alert>}
 						</div>
 						<div className="mb-3">
 							<label htmlFor="password" className="form-label">Password</label>
@@ -101,7 +101,7 @@ function CreateAccount () {
 								id="password"
 								onChange={e => validatePassword(e.currentTarget.value)}
 								onBlur={e => validatePassword(password)} />
-							{(!passwordValid && showPaswordError) && <Alert className="alert alert-danger">{passwordErrMessage}</Alert>}
+							{(!passwordValid && showPaswordError) && <uiCtx.Alert className="alert alert-danger">{passwordErrMessage}</uiCtx.Alert>}
 						</div>
 						<div className="mb-3">
 							<label htmlFor="email" className="form-label">Email</label>
@@ -113,12 +113,12 @@ function CreateAccount () {
 								aria-describedby="emailHelp"
 								onChange={e => validateEmail(e.currentTarget.value)}
 								onBlur={e => validateEmail(email)} />
-							{(!emailValid && showEmailError) && <Alert className="alert alert-danger">The email is mandatory</Alert>}
+							{(!emailValid && showEmailError) && <uiCtx.Alert className="alert alert-danger">The email is mandatory</uiCtx.Alert>}
 						</div>
 						<button type="submit" className="btn btn-primary btn-bank" onClick={(e) => handleCreate(e)} disabled={disabledSummitBtn}>{createButtonText}</button>
 					</form>
-				</Card.Body>
-			</Card>
+				</uiCtx.Card.Body>
+			</uiCtx.Card>
 		</div>
 	);
 }

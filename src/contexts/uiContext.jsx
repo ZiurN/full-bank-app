@@ -1,12 +1,16 @@
 import {createContext} from "react";
 /** Router */
-import {Route, Routes, useLocation, Link, useNavigate} from "react-router-dom";
+import {Route, Routes, useLocation, Link, useNavigate, Navigate} from "react-router-dom";
 /** UI Bootstrap Components */
 import Container from 'react-bootstrap/Container';
 import Modal from 'react-bootstrap/Modal';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Navbar from 'react-bootstrap/Navbar';
+import Carousel from 'react-bootstrap/Carousel';
+import Alert from 'react-bootstrap/Alert';
+import Stack from 'react-bootstrap/Stack';
+import ListGroup from 'react-bootstrap/ListGroup';
 /** UI Custom components */
 import MainNavBar from '../components/mainNavbar';
 /** UI Custom Pages */
@@ -26,6 +30,7 @@ const UiContextProvider = ({children}) => {
 		useLocation,
 		Link,
 		useNavigate,
+		Navigate,
 		MainNavBar,
 		Home,
 		CreateAccount,
@@ -37,7 +42,11 @@ const UiContextProvider = ({children}) => {
 		Modal,
 		Container,
 		Button,
-		Navbar
+		Navbar,
+		Carousel,
+		Alert,
+		Stack,
+		ListGroup
 	};
 	return (
 		<UiContext.Provider value={contextValue}>

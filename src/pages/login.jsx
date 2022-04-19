@@ -1,8 +1,6 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useContext } from 'react'
 import {UserContext} from '../contexts/userContext';
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
+import {UiContext} from '../contexts/uiContext';
 
 function Login () {
 	const [name, setName] = useState('');
@@ -10,6 +8,7 @@ function Login () {
 	const [loginError, setLoginError] = useState(false);
 	const [loginErrorMessage, setLoginErrorMessage] = useState('');
 	const ctx = useContext(UserContext);
+	const uiCtx = useContext(UiContext);
 	function handleLogin (e) {
 		e.preventDefault();
 		let loggedClient = null;
@@ -32,9 +31,9 @@ function Login () {
 	}
 	return (
 		<div style={{ display: 'flex', justifyContent: 'center' }}>
-			<Card style={{ width: '36rem' }}>
-				<Card.Body>
-					<Card.Title>Welcome to the BadBank</Card.Title>
+			<uiCtx.Card style={{ width: '36rem' }}>
+				<uiCtx.Card.Body>
+					<uiCtx.Card.Title>Welcome to the BadBank</uiCtx.Card.Title>
 					<form>
 						<div className="mb-3">
 							<label htmlFor="name" className="form-label">Name</label>
@@ -57,19 +56,19 @@ function Login () {
 								onChange={e => setPassword(e.currentTarget.value)} />
 						</div>
 						<button type="submit" className="btn btn-primary btn-bank" onClick={(e) => {handleLogin(e)}}>Login</button>
-						<Modal show={loginError}>
-							<Card className="text-center" bg='warning'>
-								<Card.Body>
-									<Card.Text>
+						<uiCtx.Modal show={loginError}>
+							<uiCtx.Card className="text-center" bg='warning'>
+								<uiCtx.Card.Body>
+									<uiCtx.Card.Text>
 										{loginErrorMessage}
-									</Card.Text>
-									<Button variant="light" onClick={closeModal}>Retry</Button>
-								</Card.Body>
-							</Card>
-						</Modal>
+									</uiCtx.Card.Text>
+									<uiCtx.Button variant="light" onClick={closeModal}>Retry</uiCtx.Button>
+								</uiCtx.Card.Body>
+							</uiCtx.Card>
+						</uiCtx.Modal>
 					</form>
-				</Card.Body>
-			</Card>
+				</uiCtx.Card.Body>
+			</uiCtx.Card>
 		</div>
 	);
 }
