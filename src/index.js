@@ -6,13 +6,16 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {UserContextProvider} from './contexts/userContext'
+import {UiContextProvider} from './contexts/uiContext';
 
 ReactDOM.render(
 	<React.StrictMode>
 		<BrowserRouter>
-			<UserContextProvider>
-				<App />
-			</UserContextProvider>
+			<UiContextProvider>
+				<UserContextProvider>
+					<App />
+				</UserContextProvider>
+			</UiContextProvider>
 		</BrowserRouter>
 	</React.StrictMode>,
 	document.getElementById('root')
