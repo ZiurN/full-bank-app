@@ -30,3 +30,11 @@
 .ui-spinner-hidden {
 	display: none;
 }
+.btn-logout {
+	width: 100%;
+	text-align: left !important;
+}
+.dropdown-user-toggle {
+	background-color: #CE6784 !important;
+	border: none !important;
+}

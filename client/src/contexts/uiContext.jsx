@@ -10,6 +10,8 @@ import Carousel from 'react-bootstrap/Carousel';
 import Alert from 'react-bootstrap/Alert';
 import Stack from 'react-bootstrap/Stack';
 import ListGroup from 'react-bootstrap/ListGroup';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton'
 /** UI Custom components */
 import MainNavBar from '../components/mainNavbar';
 import UiModal from '../components/uiModal';
@@ -50,7 +52,9 @@ const UiContextProvider = ({children}) => {
 		Carousel,
 		Alert,
 		Stack,
-		ListGroup
+		ListGroup,
+		Dropdown,
+		DropdownButton
 	};
 	return (
 		<UiContext.Provider value={contextValue}>

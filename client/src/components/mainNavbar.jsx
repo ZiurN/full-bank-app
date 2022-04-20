@@ -7,6 +7,7 @@ function MainNavBar () {
 	const ctx = useContext(UserContext);
 	const uiCtx = useContext(UiContext);
 	const validUser = ctx.validUser;
+	const client = ctx.loggedClient;
 	const navigate = uiCtx.useNavigate();
 	function handleLogout() {
 		ctx.logoutUser()
@@ -29,8 +30,17 @@ function MainNavBar () {
 				{validUser && (<h3>Balance: $ {ctx.loggedClient != null ? ctx.loggedClient.balance : 0} </h3>)}
 				{validUser && (<uiCtx.Link className="nav-link nav-link-hover" to="/deposit" title="Make a deposit to your account" >Deposit</uiCtx.Link>)}
 				{validUser && (<uiCtx.Link className="nav-link nav-link-hover" to="/withdraw" title="Request money from your account" >Withdraw</uiCtx.Link>)}
-				{validUser && (<uiCtx.Link className="nav-link nav-link-hover" to="/all-data" title="See a general overview of your account" >All Data</uiCtx.Link>)}
-				{validUser && (<uiCtx.Button className="nav-link nav-link-hover" variant="light" onClick={handleLogout} title="Sign out of your account">Logout</uiCtx.Button>)}
+				{validUser && (
+					<uiCtx.Dropdown>
+					<uiCtx.Dropdown.Toggle id="dropdown-basic" className="dropdown-user-toggle">
+						{client != null ? client.name : "User"}
+					</uiCtx.Dropdown.Toggle>
+					<uiCtx.Dropdown.Menu>
+						<uiCtx.Link className="nav-link nav-link-hover" to="/all-data" title="See a general overview of your account" >All Data</uiCtx.Link>
+						<uiCtx.Button className="nav-link nav-link-hover btn-logout" variant="light" onClick={handleLogout} title="Sign out of your account">Logout</uiCtx.Button>
+					</uiCtx.Dropdown.Menu>
+				  </uiCtx.Dropdown>
+				)}
 			</uiCtx.Container>
 			<uiCtx.UiModal show={showModal} type='success' text='Have a nice day!'/>
 		</uiCtx.Navbar>
