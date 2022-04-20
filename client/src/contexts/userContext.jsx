@@ -19,7 +19,6 @@ const UserContext = createContext();
 const UserContextProvider = ({children}) => {
 	const [userId, setUserId] = useState('');
 	const [validUser, setValidUser] = useState(false);
-	const [clientCreated, setClientCreated] = useState(false);
 	const [loggedClient, setLoggedClient] = useState(null);
 	const [loginSuccess, setLoginSuccess] = useState(false);
 	const navigate = useNavigate();
@@ -44,11 +43,24 @@ const UserContextProvider = ({children}) => {
 		setValidUser(false);
 		setLoggedClient(null);
 	}, []);
+	async function addNewClient (newUser) {
+		var requestOptions = {
+			method: 'POST',
+			body: JSON.stringify(newUser),
+			headers : {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json'
+			}
+		};
+		const response = await fetch('http://localhost:5000/create-account', requestOptions);
+		const content = await response.json();
+		return content;
+	}
 	const contextValue = {
 		loginSuccess,
 		loggedClient,
 		validUser,
-		clientCreated,
+		addNewClient,
 		validateUser,
 		updateUserState,
 		logoutUser,

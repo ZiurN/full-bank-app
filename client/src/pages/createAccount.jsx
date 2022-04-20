@@ -3,6 +3,7 @@ import {UserContext} from '../contexts/userContext';
 import {UiContext} from '../contexts/uiContext';
 
 function CreateAccount () {
+	const defaultModalInfo = {show : false, type: 'success', message : 'OK'}
 	const [showNameError, setShowNameError] = useState(false);
 	const [showEmailError, setShowEmailError] = useState(false);
 	const [showPaswordError, setShowPaswordError] = useState(false);
@@ -15,7 +16,9 @@ function CreateAccount () {
 	const [passwordValid, setPasswordValid] = useState(false);
 	const [passwordErrMessage, setPasswordErrMessage] = useState(true);
 	const [createButtonText, setCreateButtonText] = useState('Create Account');
-	const ctx = useContext(UserContext);
+	const [loading, setLoading] = useState(false);
+	const [showModal, setShowModal] = useState(defaultModalInfo);
+	const userCtx = useContext(UserContext);
 	const uiCtx = useContext(UiContext);
 	useEffect(() => {
 		function checkToEnableSummitBtn () {
@@ -48,19 +51,34 @@ function CreateAccount () {
 	}
 	function handleCreate(e) {
 		e.preventDefault();
+		setLoading(true);
 		if (!validate(name, 'name')) return;
 		if (!validate(email, 'email')) return;
 		if (!validate(password, 'password')) return;
 		let newClient = {
 			name: name,
 			email: email,
-			password: password,
-			balance: 0,
-			image: false
+			password: password
 		}
-		ctx.addNewClient(newClient);
-		setCreateButtonText('Create Another Account');
-		clearForm();
+		userCtx.addNewClient(newClient).then((result) => {
+			console.log(result);
+			let modalInfo = {show : true, type: 'success', message : result.message};
+			setShowModal(modalInfo);
+			setTimeout(() => {
+				setShowModal(defaultModalInfo);
+			}, 1500);
+			setCreateButtonText('Create Another Account');
+			clearForm();
+			setLoading(false);
+		}).catch((err) => {
+			let modalInfo = {show : true, type: 'warning', message : 'error creating new account'};
+			console.log(err);
+			setShowModal(modalInfo);
+			setTimeout(() => {
+				setShowModal(defaultModalInfo);
+			}, 1500);
+			setLoading(false);
+		});
 	}
 	function clearForm () {
 		setName('');
@@ -119,6 +137,8 @@ function CreateAccount () {
 					</form>
 				</uiCtx.Card.Body>
 			</uiCtx.Card>
+			<uiCtx.UiSpinner show={loading} />
+			<uiCtx.UiModal show={showModal.show} type={showModal.type} text={showModal.message}/>
 		</div>
 	);
 }
