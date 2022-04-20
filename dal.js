@@ -1,28 +1,27 @@
-const MongoClient = require('mongodb').MongoClient;
-const url = 'mongodb://localhost:27017';
-let db = null;
+import {initializeApp} from "firebase/app";
+import {getFirestore, collection, getDocs, doc, setDoc, query, where} from "firebase/firestore";
 
-MongoClient.connect(url, {useUnifiedTopology: true}, (err, client) => {
-	console.log('Connected!');
-	db = client.db('database');
-});
+const firebaseConfig = {
+	apiKey: "AIzaSyAGJZCF4JYuH0MBGuzoo7_qHjwa66ol8q4",
+	authDomain: "mit-test-project-57d3d.firebaseapp.com",
+	databaseURL: "https://mit-test-project-57d3d-default-rtdb.firebaseio.com",
+	projectId: "mit-test-project-57d3d",
+	storageBucket: "mit-test-project-57d3d.appspot.com",
+	messagingSenderId: "713529231221",
+	appId: "1:713529231221:web:6e293568dff345ffc5753c"
+};
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
+const usersRef = collection(db, "users");
 
-function createUser (name, email, password) {
+export function retrieveUserInfo (UserId) {
 	return new Promise((resolve, reject) => {
-		const collection = db.collection('users');
-		const doc = {name, email, password, balance: 0};
-		collection.insertOne(doc, {w:1}, (err, result) => {
-			err ? reject(err) : resolve(doc);
-		});
-	})
-}
-
-function returnAllUsers () {
-	return new Promise((resolve, reject) => {
-		const costumers = db.collection('users').find({}).toArray((err, docs) => {
-			err ? reject(err) : resolve(docs);
-		});
+		const q = query(usersRef, where("userId", "==", UserId));
+		const querySnapshot = getDocs(q);
+		querySnapshot
+		.then(data => {
+			data.docs.length = 0 ? reject('No Users') : resolve(data.docs[0].data());
+		})
+		.catch(err => reject(err));
 	});
 }
-
-module.exports = {createUser, returnAllUsers};
