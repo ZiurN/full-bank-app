@@ -13,6 +13,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 /** UI Custom components */
 import MainNavBar from '../components/mainNavbar';
 import UiModal from '../components/uiModal';
+import UiSpinner from '../components/uiSpinner';
 /** UI Custom Pages */
 import Home from '../pages/home';
 import CreateAccount from '../pages/createAccount';
@@ -20,6 +21,8 @@ import Deposit from '../pages/deposit';
 import Withdraw from '../pages/withdraw';
 import Login from '../pages/login';
 import AllData from '../pages/alldata';
+/** CSS */
+import '../App.css';
 
 const UiContext = createContext();
 
@@ -32,6 +35,8 @@ const UiContextProvider = ({children}) => {
 		useNavigate,
 		Navigate,
 		MainNavBar,
+		UiModal,
+		UiSpinner,
 		Home,
 		CreateAccount,
 		Deposit,
@@ -39,7 +44,6 @@ const UiContextProvider = ({children}) => {
 		Login,
 		AllData,
 		Card,
-		UiModal,
 		Container,
 		Button,
 		Navbar,

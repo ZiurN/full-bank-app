@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import {useState, useContext} from 'react'
 import {UserContext} from '../contexts/userContext';
 import {UiContext} from '../contexts/uiContext';
 
@@ -7,19 +7,23 @@ function Login () {
 	const [password, setPassword] = useState('');
 	const [loginError, setLoginError] = useState(false);
 	const [loginErrorMessage, setLoginErrorMessage] = useState('');
+	const [loading, setLoading] = useState(false);
 	const userCtx = useContext(UserContext);
 	const uiCtx = useContext(UiContext);
 	function handleLogin (e) {
 		e.preventDefault();
+		setLoading(true);
 		userCtx.signInWithEmailAndPassword(userCtx.auth, email, password)
 			.then((userCredential) => {
 				// Signed in
 				const user = userCredential.user;
 				getClientInfo(user.uid)
 				.then((data) => {
+					setLoading(false);
 					userCtx.validateUser(true, data);
 				}).catch((err) => {
 					console.log(err);
+					setLoading(false);
 					userCtx.validateUser(false, null);
 				});
 			})
@@ -27,6 +31,7 @@ function Login () {
 				const errorMessage = error.message.replace('Firebase: Error ', '');
 				setLoginError(true);
 				setLoginErrorMessage(errorMessage);
+				setLoading(false);
 			});
 	}
 	async function getClientInfo (userId) {
@@ -78,6 +83,7 @@ function Login () {
 					</form>
 				</uiCtx.Card.Body>
 			</uiCtx.Card>
+			<uiCtx.UiSpinner show={loading} />
 		</div>
 	);
 }
