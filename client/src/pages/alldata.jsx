@@ -3,14 +3,14 @@ import {UserContext} from '../contexts/userContext';
 import {UiContext} from '../contexts/uiContext';
 
 function AllData () {
-	const ctx = useContext(UserContext);
+	const userCtx = useContext(UserContext);
 	const uiCtx = useContext(UiContext);
 	const navigate = uiCtx.useNavigate();
-	if(!ctx.validUser) {
+	if(!userCtx.validUser) {
 		navigate("/");
 		return (<uiCtx.Navigate to="/"/>);
 	}
-	const client = ctx.loggedClient;
+	const client = userCtx.loggedClient;
 	let imageURL = client.image ? client.image : '';
 	return (
 		<div style={{ display: 'flex', justifyContent: 'center' }}>
