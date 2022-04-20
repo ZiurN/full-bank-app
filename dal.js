@@ -1,5 +1,5 @@
 import {initializeApp} from "firebase/app";
-import {getFirestore, collection, getDocs, doc, addDoc, query, where} from "firebase/firestore";
+import {getFirestore, collection, getDocs, addDoc, query, where, orderBy} from "firebase/firestore";
 import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from "firebase/auth";
 
 const firebaseConfig = {
@@ -15,16 +15,39 @@ const firebaseApp = initializeApp(firebaseConfig);;
 const auth = getAuth();
 const db = getFirestore(firebaseApp);
 const usersRef = collection(db, "users");
+const transactionsRef = collection(db, "transactions");
 
 export function retrieveUserInfo (UserId) {
 	return new Promise((resolve, reject) => {
-		const q = query(usersRef, where("userId", "==", UserId));
-		const querySnapshot = getDocs(q);
-		querySnapshot
-			.then(data => {
-				data.docs.length = 0 ? reject('No Users') : resolve(data.docs[0].data());
-			})
-			.catch(err => reject(err));
+		const queryUserInfo = query(usersRef, where("userId", "==", UserId));
+		const querySnapshot = getDocs(queryUserInfo);
+		querySnapshot.then(data => {
+			if (data.docs.length === 0) {
+				reject('No Users');
+			} else {
+				retrieveUserTransactionsInf(UserId).then((transactions) => {
+					resolve({userInfo : data.docs[0].data(), userTransactionsInfo : transactions});
+				}).catch(err => reject(err));
+			}
+		}).catch(err => reject(err));
+	});
+}
+
+export function retrieveUserTransactionsInf (UserId) {
+	return new Promise((resolve, reject) => {
+		const queryTransactionsInf = query(transactionsRef, where("userId", "==", UserId), orderBy('date'));
+		const querySnapshot = getDocs(queryTransactionsInf);
+		querySnapshot.then(data => {
+			let transactionsList = [];
+			if (data.docs.length === 0) {
+				resolve([]);
+			} else {
+				data.forEach((doc) => {
+					transactionsList.push(doc.data());
+				});
+				resolve(transactionsList);
+			}
+		}).catch(err => reject(err));
 	});
 }
 
