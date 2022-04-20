@@ -1,5 +1,6 @@
 import {initializeApp} from "firebase/app";
-import {getFirestore, collection, getDocs, doc, setDoc, query, where} from "firebase/firestore";
+import {getFirestore, collection, getDocs, doc, addDoc, query, where} from "firebase/firestore";
+import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from "firebase/auth";
 
 const firebaseConfig = {
 	apiKey: "AIzaSyAGJZCF4JYuH0MBGuzoo7_qHjwa66ol8q4",
@@ -10,7 +11,8 @@ const firebaseConfig = {
 	messagingSenderId: "713529231221",
 	appId: "1:713529231221:web:6e293568dff345ffc5753c"
 };
-const firebaseApp = initializeApp(firebaseConfig);
+const firebaseApp = initializeApp(firebaseConfig);;
+const auth = getAuth();
 const db = getFirestore(firebaseApp);
 const usersRef = collection(db, "users");
 
@@ -19,9 +21,34 @@ export function retrieveUserInfo (UserId) {
 		const q = query(usersRef, where("userId", "==", UserId));
 		const querySnapshot = getDocs(q);
 		querySnapshot
-		.then(data => {
-			data.docs.length = 0 ? reject('No Users') : resolve(data.docs[0].data());
-		})
-		.catch(err => reject(err));
+			.then(data => {
+				data.docs.length = 0 ? reject('No Users') : resolve(data.docs[0].data());
+			})
+			.catch(err => reject(err));
+	});
+}
+
+export function createUserInFirebase ({name, email, password}) {
+	return new Promise((resolve, reject) => {
+		signInWithEmailAndPassword(auth, 'system@test.com', 'jef123456').then((userCredential) => {
+			createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
+				// Signed in
+				const user = userCredential.user;
+				let newUser = {
+					userId : user.uid,
+					name: name,
+					email: email,
+					balance: 0,
+					image: 'https://firebasestorage.googleapis.com/v0/b/mit-test-project-57d3d.appspot.com/o/newUser.jpg?alt=media&token=d86625c1-7c6e-4b38-a7f5-463249ca4269'
+				}
+				const docRef = addDoc(collection(db, "users"), newUser).then((result) => {
+					console.log(result);
+					console.log("Document written with ID: ", docRef.id);
+					signOut(auth).then(() => {
+						resolve(`User ${name} has been created!`);
+					}).catch(error => reject(error));
+				}).catch(error => reject(error));
+			}).catch(error => reject(error));
+		}).catch(error => reject(error));
 	});
 }
