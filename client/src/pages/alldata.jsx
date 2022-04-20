@@ -11,7 +11,7 @@ function AllData () {
 		return (<uiCtx.Navigate to="/"/>);
 	}
 	const client = ctx.loggedClient;
-	let imageName = client.image ? client.name : 'newUser';
+	let imageURL = client.image ? client.image : '';
 	return (
 		<div style={{ display: 'flex', justifyContent: 'center' }}>
 			<uiCtx.Card style={{ width: '36rem' }}>
@@ -23,7 +23,7 @@ function AllData () {
 						<div style={{borderRadius: '50%', overflow: 'hidden', width : '25%'}}>
 							<img
 								className="d-block w-100"
-								src={window.location.origin + '/images/' + imageName + '.jpg'}
+								src={imageURL}
 								alt="First slide"
 							/>
 						</div>

@@ -3,28 +3,42 @@ import {UserContext} from '../contexts/userContext';
 import {UiContext} from '../contexts/uiContext';
 
 function Login () {
-	const [name, setName] = useState('');
+	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [loginError, setLoginError] = useState(false);
 	const [loginErrorMessage, setLoginErrorMessage] = useState('');
-	const ctx = useContext(UserContext);
+	const userCtx = useContext(UserContext);
 	const uiCtx = useContext(UiContext);
 	function handleLogin (e) {
 		e.preventDefault();
-		let loggedClient = null;
-		let validatedUser = ctx.tempClientsList.reduce((initial, current) => {
-			let client = current;
-			if (client.name === name && client.password === password) {
-				loggedClient = client;
+		userCtx.signInWithEmailAndPassword(userCtx.auth, email, password)
+			.then((userCredential) => {
+				// Signed in
+				const user = userCredential.user;
+				getClientInfo(user.uid)
+				.then((data) => {
+					userCtx.validateUser(true, data);
+				}).catch((err) => {
+					console.log(err);
+					userCtx.validateUser(false, null);
+				});
+			})
+			.catch((error) => {
+				const errorMessage = error.message.replace('Firebase: Error ', '');
+				setLoginError(true);
+				setLoginErrorMessage(errorMessage);
+			});
+	}
+	async function getClientInfo (userId) {
+		var requestOptions = {
+			headers : {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json'
 			}
-			return initial || (client.name === name && client.password === password);
-		}, false);
-		if (!validatedUser) {
-			setLoginError(true);
-			setLoginErrorMessage('Incorrect Client Information');
-		} else {
-			ctx.validateUser(validatedUser, loggedClient);
-		}
+		};
+		const response = await fetch('http://localhost:5000/client-info/' + userId, requestOptions);
+		const content = await response.json();
+		return content;
 	}
 	function closeModal () {
 		setLoginError(false);
@@ -36,15 +50,15 @@ function Login () {
 					<uiCtx.Card.Title>Welcome to the BadBank</uiCtx.Card.Title>
 					<form>
 						<div className="mb-3">
-							<label htmlFor="name" className="form-label">Name</label>
+							<label htmlFor="name" className="form-label">Email</label>
 							<input
-								value={name}
-								type="text"
+								value={email}
+								type="email"
 								className="form-control"
-								id="name"
+								id="email"
 								aria-describedby="nameHelp"
-								onChange={e => setName(e.currentTarget.value)} />
-							<div id="nameHelp" className="form-text">Name</div>
+								onChange={e => setEmail(e.currentTarget.value)} />
+							<div id="nameHelp" className="form-text">Email</div>
 						</div>
 						<div className="mb-3">
 							<label htmlFor="password" className="form-label">Password</label>
