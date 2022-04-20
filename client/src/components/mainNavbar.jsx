@@ -7,7 +7,7 @@ function MainNavBar () {
 	const userCtx = useContext(UserContext);
 	const uiCtx = useContext(UiContext);
 	const validUser = userCtx.validUser;
-	const client = userCtx.loggedClient;
+	const client = userCtx.loggedClient.userInfo;
 	function handleLogout() {
 		userCtx.signOut(userCtx.auth)
 			.then(() => {

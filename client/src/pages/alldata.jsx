@@ -10,7 +10,7 @@ function AllData () {
 		navigate("/");
 		return (<uiCtx.Navigate to="/"/>);
 	}
-	const client = userCtx.loggedClient;
+	const client = userCtx.loggedClient.userInfo;
 	let imageURL = client.image ? client.image : '';
 	return (
 		<div style={{ display: 'flex', justifyContent: 'center' }}>
