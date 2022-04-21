@@ -4,6 +4,9 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import {retrieveUserInfo, createUserInFirebase, upddateUserInfoInFirebase} from './dal.js';
+/** Documentation */
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from './swagger.json' assert {type: 'json'};
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -12,6 +15,8 @@ const publicPath = path.join(__dirname, '/client/build');
 app.use(express.static(publicPath));
 app.use(bodyParser.json());
 app.use(cors());
+app.use(express.json());
+app.use('/api-docs',swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get('/client-info/:userId', (req, res) => {
 	retrieveUserInfo(req.params.userId)

@@ -11,6 +11,7 @@
     "firebase": "^9.6.11",
     "firebase-admin": "^10.0.2",
     "mongodb": "^4.5.0",
+    "nodemon": "^2.0.15",
     "react": "^17.0.2",
     "react-app-polyfill": "^3.0.0",
     "react-bootstrap": "^2.1.0",
@@ -23,11 +24,12 @@
     "react-router": "^6.2.1",
     "react-router-dom": "^6.2.1",
     "react-scripts": "^5.0.0",
-    "react-transition-group": "^4.4.2"
+    "react-transition-group": "^4.4.2",
+    "swagger-ui-express": "^4.3.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "nodemon --experimental-json-modules server.js"
   },
   "repository": {
     "type": "git",

@@ -1,0 +1,175 @@
+{
+	"swagger": "2.0",
+	"info": {
+		"version": "1.0.0",
+		"title": "Bad Bank API's Documentation",
+		"description": "Documentation",
+		"license": {
+			"name": "MIT",
+			"url": "https://opensource.org/licenses/MIT"
+		}
+	},
+	"host": "localhost:5000",
+	"basePath": "/",
+	"tags" : [
+		{
+			"name": "Home",
+			"description": "HomePage"
+		}
+	],
+	"schemes": ["http",	"https"],
+	"consumes": ["application/json"],
+	"produces": ["application/json"],
+	"paths": {
+		"/client-info": {
+			"get": {
+				"tags": ["User Info"],
+				"summary": "Get all user Info",
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "url",
+						"description": "User's Id in  firebase"
+					}
+				],
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200" : {
+						"description": "OK",
+						"schema": {
+							"$ref:": "#/definitions/clientInfo"
+						}
+					}
+				}
+			}
+		},
+		"/create-account": {
+			"post": {
+				"tags": ["Create Account"],
+				"summary": "Create an user in firebase",
+				"parameters": [
+					{
+						"name": "name",
+						"in": "body",
+						"description": "name of the User"
+					},
+					{
+						"name": "email",
+						"in": "body",
+						"description": "email of the User"
+					},
+					{
+						"name": "password",
+						"in": "body",
+						"description": "password of the User"
+					}
+				],
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/text"
+				],
+				"responses": {
+					"200" : {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/update-account": {
+			"post": {
+				"tags": ["Update Account"],
+				"summary": "Update User info and transactions in firebase",
+				"parameters": [
+					{
+						"name": "userInfo",
+						"in": "body",
+						"description": "Object with the info to update",
+						"schema": {
+							"$ref:": "#/definitions/userInfo"
+						}
+					},
+					{
+						"name": "transactionInf",
+						"in": "body",
+						"description": "Object with a new transaction to insert"
+					}
+				],
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/text"
+				],
+				"responses": {
+					"200" : {
+						"description": "OK"
+					},
+					"500" : {
+						"description": "Internal Error"
+					}
+				}
+			}
+		}
+	},
+	"definitions": {
+		"clientInfo": {
+			"type": "object",
+			"required": ["userId"],
+			"properties": {
+				"userInfo": {
+					"$ref:": "#/definitions/userInfo"
+				},
+				"userTransactionsInfo": {
+					"type": "array",
+					"items": {
+						"$ref:": "#/definitions/userTransactionsInfo"
+					}
+				}
+			}
+		},
+		"userInfo": {
+			"type": "object",
+			"properties": {
+				"name": {
+					"type": "String"
+				},
+				"balance": {
+					"type": "Integer"
+				},
+				"userId": {
+					"type": "String"
+				},
+				"email": {
+					"type": "String"
+				},
+				"image": {
+					"type": "String"
+				}
+			}
+		},
+		"userTransactionsInfo": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"type": "String"
+				},
+				"userId": {
+					"type": "Integer"
+				},
+				"date": {
+					"type": "String"
+				},
+				"amount": {
+					"type": "Integer"
+				}
+			}
+		}
+	}
+}
