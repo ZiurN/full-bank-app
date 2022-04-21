@@ -14,6 +14,7 @@ function Deposit () {
 	const [showAmountError, setShowAmountError] = useState(false);
 	const [amountError, setAmountError] = useState('');
 	const [disabledSummitBtn, setDisabledSummitBtn] = useState(true);
+	const [loading, setLoading] = useState(false);
 	useEffect(() => {
 		function checkToEnableSummitBtn () {
 			setDisabledSummitBtn(!validAmount);
@@ -37,6 +38,7 @@ function Deposit () {
 		setDepositAmount(e.currentTarget.value);
 	}
 	function handleDeposit (e) {
+		setLoading(true);
 		e.preventDefault();
 		let client = userCtx.loggedClient.userInfo;
 		let lastBalance = client.balance
@@ -55,6 +57,7 @@ function Deposit () {
 			setDisabledSummitBtn(true)
 			setValidAmount(false);
 			setShowAmountError(false);
+			setLoading(false);
 			setTimeout(() => {
 				setShowModal(false);
 			}, 1500);
@@ -64,6 +67,7 @@ function Deposit () {
 			setModalType('warning');
 			setModalMessage('Deposit Failed!');
 			client.balance = lastBalance;
+			setLoading(false);
 		});
 	}
 	function closeModal () {
@@ -96,6 +100,7 @@ function Deposit () {
 				type={modalType}
 				text={modalMessage}
 				children={<uiCtx.Button variant="light" onClick={closeModal}>Ok!</uiCtx.Button>}/>
+			<uiCtx.UiSpinner show={loading} />
 		</div>
 	);
 }

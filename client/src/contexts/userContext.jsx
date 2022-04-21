@@ -29,6 +29,7 @@ const UserContextProvider = ({children}) => {
 		};
 		return new Promise((resolve, reject) => {
 			updateAccountInfo(updatedInfo).then((result) => {
+				setLoggedClient({userInfo: loggedClient.userInfo, userTransactionsInfo: [...loggedClient.userTransactionsInfo, transactionInf]})
 				resolve(result);
 			}).catch(err => {console.log(err); reject(err)});
 		});

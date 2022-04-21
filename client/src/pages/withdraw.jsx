@@ -14,6 +14,7 @@ function Withdraw () {
 	const [showAmountError, setShowAmountError] = useState(false);
 	const [amountError, setAmountError] = useState('');
 	const [disabledSummitBtn, setDisabledSummitBtn] = useState(true);
+	const [loading, setLoading] = useState(false);
 	useEffect(() => {
 		function checkToEnableSummitBtn () {
 			setDisabledSummitBtn(!validAmount);
@@ -43,6 +44,7 @@ function Withdraw () {
 		setWithdrawAmount(e.currentTarget.value);
 	}
 	function handleWithdraw (e) {
+		setLoading(true);
 		e.preventDefault();
 		let client = userCtx.loggedClient.userInfo;
 		let lastBalance = client.balance;
@@ -61,6 +63,7 @@ function Withdraw () {
 			setDisabledSummitBtn(true)
 			setValidAmount(false);
 			setShowAmountError(false);
+			setLoading(false);
 			setTimeout(() => {
 				setShowModal(false);
 			}, 1500);
@@ -70,6 +73,7 @@ function Withdraw () {
 			setModalType('warning');
 			setModalMessage('Withdaw Failed!');
 			client.balance = +lastBalance;
+			setLoading(false);
 		});
 	}
 	function closeModal () {
@@ -102,6 +106,7 @@ function Withdraw () {
 				type={modalType}
 				text={modalMessage}
 				children={<uiCtx.Button variant="light" onClick={closeModal}>Ok!</uiCtx.Button>}/>
+			<uiCtx.UiSpinner show={loading} />
 		</div>
 	);
 }

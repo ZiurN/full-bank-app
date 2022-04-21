@@ -11,7 +11,8 @@ import Alert from 'react-bootstrap/Alert';
 import Stack from 'react-bootstrap/Stack';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton'
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Table from 'react-bootstrap/Table';
 /** UI Custom components */
 import MainNavBar from '../components/mainNavbar';
 import UiModal from '../components/uiModal';
@@ -27,6 +28,26 @@ import AllData from '../pages/alldata';
 import '../App.css';
 
 const UiContext = createContext();
+
+function padTo2Digits(num) {
+	return num.toString().padStart(2, '0');
+}
+
+function formatDate(date) {
+	return (
+		[
+			date.getFullYear(),
+			padTo2Digits(date.getMonth() + 1),
+			padTo2Digits(date.getDate()),
+		].join('-') +
+		' ' +
+		[
+			padTo2Digits(date.getHours()),
+			padTo2Digits(date.getMinutes()),
+			padTo2Digits(date.getSeconds()),
+		].join(':')
+	);
+}
 
 const UiContextProvider = ({children}) => {
 	const contextValue = {
@@ -54,7 +75,9 @@ const UiContextProvider = ({children}) => {
 		Stack,
 		ListGroup,
 		Dropdown,
-		DropdownButton
+		DropdownButton,
+		Table,
+		formatDate
 	};
 	return (
 		<UiContext.Provider value={contextValue}>

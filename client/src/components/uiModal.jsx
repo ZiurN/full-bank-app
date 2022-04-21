@@ -2,7 +2,7 @@ import {UiContext} from '../contexts/uiContext';
 import {useContext} from 'react';
 import Modal from 'react-bootstrap/Modal';
 
-function UiModal ({show, type, text, children }) {
+function UiModal ({show, type, text, children}) {
 	const uiCtx = useContext(UiContext);
 	let types = {
 		'warning': {
