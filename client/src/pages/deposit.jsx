@@ -3,11 +3,13 @@ import {UserContext} from '../contexts/userContext';
 import {UiContext} from '../contexts/uiContext';
 
 function Deposit () {
-	const ctx = useContext(UserContext);
+	const userCtx = useContext(UserContext);
 	const uiCtx = useContext(UiContext);
 	const navigate = uiCtx.useNavigate();
 	const [depositAmount, setDepositAmount] = useState(0);
-	const [depositSuccess, setDepositSuccess] = useState(false);
+	const [showModal, setShowModal] = useState(false);
+	const [modalType, setModalType] = useState('success');
+	const [modalMessage, setModalMessage] = useState('');
 	const [validAmount, setValidAmount] = useState(false);
 	const [showAmountError, setShowAmountError] = useState(false);
 	const [amountError, setAmountError] = useState('');
@@ -18,7 +20,7 @@ function Deposit () {
 		}
 		checkToEnableSummitBtn();
 	}, [validAmount]);
-	if(!ctx.validUser) {
+	if(!userCtx.validUser) {
 		navigate("/");
 		return (<uiCtx.Navigate to="/"/>);
 	}
@@ -36,20 +38,36 @@ function Deposit () {
 	}
 	function handleDeposit (e) {
 		e.preventDefault();
-		ctx.loggedClient.balance = +ctx.loggedClient.balance + +depositAmount;
-		ctx.updateUserState(ctx.loggedClient);
-		setDepositSuccess(true);
-		setDepositAmount(0);
-		setDisabledSummitBtn(true)
-		setValidAmount(false);
-		setShowAmountError(false);
-		setTimeout(() => {
-			setDepositSuccess(false);
-		}, 1500);
-		navigate('/deposit'); // I don't find another way to update the balance in the navbar
+		let client = userCtx.loggedClient.userInfo;
+		let lastBalance = client.balance
+		let transactionInfo = {
+			type : 'Deposit',
+			userId : userCtx.userId,
+			date: Date.now(),
+			amount: depositAmount
+		};
+		client.balance = +client.balance + +depositAmount;
+		userCtx.updateUserState(client, transactionInfo).then((result) => {
+			setShowModal(true);
+			setModalType('success');
+			setModalMessage(result.message);
+			setDepositAmount(0);
+			setDisabledSummitBtn(true)
+			setValidAmount(false);
+			setShowAmountError(false);
+			setTimeout(() => {
+				setShowModal(false);
+			}, 1500);
+			navigate('/deposit');
+		}).catch(err => {
+			setShowModal(true);
+			setModalType('warning');
+			setModalMessage('Deposit Failed!');
+			client.balance = lastBalance;
+		});
 	}
 	function closeModal () {
-		setDepositSuccess(false);
+		setShowModal(false);
 	}
 	return (
 		<div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -74,10 +92,10 @@ function Deposit () {
 				</uiCtx.Card.Body>
 			</uiCtx.Card>
 			<uiCtx.UiModal
-				show={depositSuccess}
-				type='success'
-				text={'Deposit Successfull!'}
-				children={<uiCtx.Button variant="light" onClick={closeModal}>Cool!</uiCtx.Button>}/>
+				show={showModal}
+				type={modalType}
+				text={modalMessage}
+				children={<uiCtx.Button variant="light" onClick={closeModal}>Ok!</uiCtx.Button>}/>
 		</div>
 	);
 }

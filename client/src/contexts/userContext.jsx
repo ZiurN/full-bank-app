@@ -22,8 +22,16 @@ const UserContextProvider = ({children}) => {
 	const [loggedClient, setLoggedClient] = useState(null);
 	const [loginStatus, setLoginStatus] = useState({showModal: false, type: 'success', message: 'OK'});
 	const navigate = useNavigate();
-	const updateUserState = (loggedClient) => {
-		setValidUser(loggedClient);
+	const updateUserState = (userInfo, transactionInf) => {
+		let updatedInfo = {
+			userInfo,
+			transactionInf
+		};
+		return new Promise((resolve, reject) => {
+			updateAccountInfo(updatedInfo).then((result) => {
+				resolve(result);
+			}).catch(err => {console.log(err); reject(err)});
+		});
 	};
 	const validateUser = useCallback((validatedUser, loggedClient) => {
 		if (validatedUser) {
@@ -61,9 +69,29 @@ const UserContextProvider = ({children}) => {
 		const content = await response.json();
 		return content;
 	}
+	async function updateAccountInfo (updatedInfo) {
+		var requestOptions = {
+			method: 'POST',
+			body: JSON.stringify(updatedInfo),
+			headers : {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json'
+			}
+		};
+		return new Promise ((resolve, reject) => {
+			fetch('http://localhost:5000/update-account', requestOptions).then((response) => {
+				if (response.status === 200) {
+					response.json().then((content) => resolve(content)).catch((err) => reject(err));
+				} else {
+					reject(response);
+				}
+			}).catch((err) => reject(err));
+		});
+	}
 	const contextValue = {
 		loginStatus,
 		loggedClient,
+		userId,
 		validUser,
 		addNewClient,
 		validateUser,
