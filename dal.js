@@ -20,13 +20,16 @@ const transactionsRef = collection(db, "transactions");
 export function retrieveUserInfo (UserId) {
 	return new Promise((resolve, reject) => {
 		const queryUserInfo = query(usersRef, where("userId", "==", UserId));
-		const querySnapshot = getDocs(queryUserInfo);
-		querySnapshot.then(data => {
+		getDocs(queryUserInfo).then(data => {
+			let userInfo;
 			if (data.docs.length === 0) {
 				reject('No Users');
-			} else {
-				retrieveUserTransactionsInf(UserId).then((transactions) => {
-					resolve({userInfo : data.docs[0].data(), userTransactionsInfo : transactions});
+			} else if (data.docs.length === 1){
+				data.forEach((doc) => {
+					userInfo = {...doc.data(), Id : doc.id};
+				});
+				retrieveUserTransactionsInf(UserId).then((userTransactionsInfo) => {
+					resolve({userInfo, userTransactionsInfo});
 				}).catch(err => reject(err));
 			}
 		}).catch(err => reject(err));
@@ -64,9 +67,7 @@ export function createUserInFirebase ({name, email, password}) {
 					balance: 0,
 					image: 'https://firebasestorage.googleapis.com/v0/b/mit-test-project-57d3d.appspot.com/o/newUser.jpg?alt=media&token=d86625c1-7c6e-4b38-a7f5-463249ca4269'
 				}
-				const docRef = addDoc(collection(db, "users"), newUser).then((result) => {
-					console.log(result);
-					console.log("Document written with ID: ", docRef.id);
+				addDoc(usersRef, newUser).then((result) => {
 					signOut(auth).then(() => {
 						resolve(`User ${name} has been created!`);
 					}).catch(error => reject(error));

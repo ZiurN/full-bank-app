@@ -22,7 +22,6 @@ function Login () {
 					setLoading(false);
 					userCtx.validateUser(true, data);
 				}).catch((err) => {
-					console.log(err);
 					setLoading(false);
 					userCtx.validateUser(false, null);
 				});
@@ -34,16 +33,19 @@ function Login () {
 				setLoading(false);
 			});
 	}
-	async function getClientInfo (userId) {
+	function getClientInfo (userId) {
 		var requestOptions = {
 			headers : {
 				'Content-Type': 'application/json',
 				'Accept': 'application/json'
 			}
 		};
-		const response = await fetch('http://localhost:5000/client-info/' + userId, requestOptions);
-		const content = await response.json();
-		return content;
+		return new Promise ((resolve, reject) => {
+			fetch('http://localhost:5000/client-info/' + userId, requestOptions).then((response) => {
+				response.json().then((content) => resolve(content)).catch((err) => reject(err));
+			}).catch((err) => reject(err));
+		});
+
 	}
 	function closeModal () {
 		setLoginError(false);

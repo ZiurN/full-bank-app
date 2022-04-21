@@ -61,7 +61,6 @@ function CreateAccount () {
 			password: password
 		}
 		userCtx.addNewClient(newClient).then((result) => {
-			console.log(result);
 			let modalInfo = {show : true, type: 'success', message : result.message};
 			setShowModal(modalInfo);
 			setTimeout(() => {
@@ -72,7 +71,6 @@ function CreateAccount () {
 			setLoading(false);
 		}).catch((err) => {
 			let modalInfo = {show : true, type: 'warning', message : 'error creating new account'};
-			console.log(err);
 			setShowModal(modalInfo);
 			setTimeout(() => {
 				setShowModal(defaultModalInfo);

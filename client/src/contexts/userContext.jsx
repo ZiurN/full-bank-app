@@ -20,26 +20,31 @@ const UserContextProvider = ({children}) => {
 	const [userId, setUserId] = useState('');
 	const [validUser, setValidUser] = useState(false);
 	const [loggedClient, setLoggedClient] = useState(null);
-	const [loginSuccess, setLoginSuccess] = useState(false);
+	const [loginStatus, setLoginStatus] = useState({showModal: false, type: 'success', message: 'OK'});
 	const navigate = useNavigate();
 	const updateUserState = (loggedClient) => {
 		setValidUser(loggedClient);
 	};
 	const validateUser = useCallback((validatedUser, loggedClient) => {
 		if (validatedUser) {
-			setLoginSuccess(validatedUser);
+			setLoginStatus({showModal: validatedUser, type: 'success', message: 'Login success'});
 			setValidUser(validatedUser);
-			setUserId(loggedClient.uid);
+			setUserId(loggedClient.userInfo.userId);
 			setLoggedClient(loggedClient);
 			setTimeout(() => {
 				navigate("/all-data");
-				setLoginSuccess(false);
+				setLoginStatus({showModal: false, type: 'success', message: 'Login success'});
 			}, 1500);
 			return <Navigate to="/all-data" />
+		} else {
+			setLoginStatus({showModal: true, type: 'warning', message: 'Login failed'});
+			setTimeout(() => {
+				setLoginStatus({showModal: false, type: 'warning', message: 'Login failed'});
+			}, 1500);
 		}
 	}, [navigate]);
 	const logoutUser = useCallback(() => {
-		setLoginSuccess(false);
+		setLoginStatus({showModal: false, type: 'success', message: 'OK'});
 		setValidUser(false);
 		setLoggedClient(null);
 	}, []);
@@ -57,7 +62,7 @@ const UserContextProvider = ({children}) => {
 		return content;
 	}
 	const contextValue = {
-		loginSuccess,
+		loginStatus,
 		loggedClient,
 		validUser,
 		addNewClient,

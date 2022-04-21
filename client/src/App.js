@@ -3,7 +3,7 @@ import {UserContext} from './contexts/userContext';
 import {UiContext} from './contexts/uiContext';
 
 function App() {
-	const ctx = useContext(UserContext);
+	const userCtx = useContext(UserContext);
 	const uiCtx = useContext(UiContext);
 	const location = uiCtx.useLocation();
 	useEffect(() => {
@@ -22,8 +22,8 @@ function App() {
 				<uiCtx.Route path="/withdraw"  element={<uiCtx.Withdraw/>} />
 				<uiCtx.Route path="/all-data" element={<uiCtx.AllData/>} />
 			</uiCtx.Routes>
-			<uiCtx.UiModal show={ctx.loginSuccess} type='success' text='Login Successfully!'/>
-			<uiCtx.UiModal show={ctx.clientCreated} type='success' text='Account Created!'/>
+			<uiCtx.UiModal show={userCtx.loginStatus.showModal} type={userCtx.loginStatus.type} text={userCtx.loginStatus.message}/>
+			<uiCtx.UiModal show={userCtx.clientCreated} type='success' text='Account Created!'/>
 		</uiCtx.Container>
 	);
 }
