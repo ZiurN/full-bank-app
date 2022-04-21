@@ -3,7 +3,7 @@ import {fileURLToPath} from 'url';
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import {retrieveUserInfo, createUserInFirebase} from './dal.js';
+import {retrieveUserInfo, createUserInFirebase, upddateUserInfoInFirebase} from './dal.js';
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -27,6 +27,14 @@ app.post('/create-account', (req, res) => {
 			res.send({message: data});
 		}).catch((err) => {
 			res.send(err);
+		});
+});
+app.post('/update-account', (req, res) => {
+	upddateUserInfoInFirebase(req.body)
+		.then((data) => {
+			res.status(200).send({message: data});
+		}).catch((err) => {
+			res.status(500).send(err);
 		});
 });
 const port = process.env.PORT || 5000;

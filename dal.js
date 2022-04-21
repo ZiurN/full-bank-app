@@ -1,5 +1,5 @@
 import {initializeApp} from "firebase/app";
-import {getFirestore, collection, getDocs, addDoc, query, where, orderBy} from "firebase/firestore";
+import {getFirestore, collection, getDocs, addDoc, query, where, orderBy, doc, updateDoc} from "firebase/firestore";
 import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from "firebase/auth";
 
 const firebaseConfig = {
@@ -74,5 +74,16 @@ export function createUserInFirebase ({name, email, password}) {
 				}).catch(error => reject(error));
 			}).catch(error => reject(error));
 		}).catch(error => reject(error));
+	});
+}
+
+export function upddateUserInfoInFirebase ({userInfo, transactionInf}) {
+	return new Promise((resolve, reject) => {
+		let userRef = doc(db, 'users', userInfo.Id);
+		updateDoc(userRef, {balance: userInfo.balance}).then(() => {
+			addDoc(transactionsRef, transactionInf).then(() => {
+				resolve(`Deposit Done!`);
+			}).catch(error => {console.log(error); reject(error)});
+		}).catch(error => {console.log(error); reject(error)});
 	});
 }
