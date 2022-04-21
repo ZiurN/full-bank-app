@@ -3,11 +3,13 @@ import {UserContext} from '../contexts/userContext';
 import {UiContext} from '../contexts/uiContext';
 
 function Withdraw () {
-	const ctx = useContext(UserContext);
+	const userCtx = useContext(UserContext);
 	const uiCtx = useContext(UiContext);
 	const navigate = uiCtx.useNavigate();
 	const [withdrawAmount, setWithdrawAmount] = useState(0);
-	const [withdrawSuccess, setWithdrawSuccess] = useState(false);
+	const [showModal, setShowModal] = useState(false);
+	const [modalType, setModalType] = useState('success');
+	const [modalMessage, setModalMessage] = useState('');
 	const [validAmount, setValidAmount] = useState(false);
 	const [showAmountError, setShowAmountError] = useState(false);
 	const [amountError, setAmountError] = useState('');
@@ -18,7 +20,7 @@ function Withdraw () {
 		}
 		checkToEnableSummitBtn();
 	}, [validAmount]);
-	if(!ctx.validUser) {
+	if(!userCtx.validUser) {
 		navigate("/");
 		return (<uiCtx.Navigate to="/"/>);
 	}
@@ -26,7 +28,7 @@ function Withdraw () {
 		const regexp = /\d{1,}/;
 		if (!showAmountError) setShowAmountError(true);
 		let input = e.currentTarget.value;
-		let currentBalance = ctx.loggedClient.balance;
+		let currentBalance = userCtx.loggedClient.balance;
 		let numberInvalid = !input.match(regexp);
 		let positiveInvalid = input <= 0;
 		let overdraftInvalid = Number(input) > Number(currentBalance);
@@ -42,20 +44,36 @@ function Withdraw () {
 	}
 	function handleWithdraw (e) {
 		e.preventDefault();
-		ctx.loggedClient.balance = + ctx.loggedClient.balance - + withdrawAmount;
-		ctx.updateUserState(ctx.loggedClient);
-		setWithdrawSuccess(true);
-		setWithdrawAmount(0);
-		setDisabledSummitBtn(true)
-		setValidAmount(false);
-		setShowAmountError(false);
-		setTimeout(() => {
-			setWithdrawSuccess(false);
-		}, 1500);
-		navigate('/withdraw'); // I don't find another way to update the balance in the navbar
+		let client = userCtx.loggedClient.userInfo;
+		let lastBalance = client.balance;
+		let transactionInfo = {
+			type : 'Withdraw',
+			userId : userCtx.userId,
+			date: Date.now(),
+			amount: withdrawAmount
+		};
+		client.balance = +client.balance - +withdrawAmount;
+		userCtx.updateUserState(client, transactionInfo).then((result) => {
+			setShowModal(true);
+			setModalType('success');
+			setModalMessage(result.message);
+			setWithdrawAmount(0);
+			setDisabledSummitBtn(true)
+			setValidAmount(false);
+			setShowAmountError(false);
+			setTimeout(() => {
+				setShowModal(false);
+			}, 1500);
+			navigate('/withdraw'); // I don't find another way to update the balance in the navbar
+		}).catch(err => {
+			setShowModal(true);
+			setModalType('warning');
+			setModalMessage('Withdaw Failed!');
+			client.balance = +lastBalance;
+		});
 	}
 	function closeModal () {
-		setWithdrawSuccess(false);
+		setShowModal(false);
 	}
 	return (
 		<div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -80,10 +98,10 @@ function Withdraw () {
 				</uiCtx.Card.Body>
 			</uiCtx.Card>
 			<uiCtx.UiModal
-				show={withdrawSuccess}
-				type='success'
-				text={'Withdraw Successfull!'}
-				children={<uiCtx.Button variant="light" onClick={closeModal}>Cool!</uiCtx.Button>}/>
+				show={showModal}
+				type={modalType}
+				text={modalMessage}
+				children={<uiCtx.Button variant="light" onClick={closeModal}>Ok!</uiCtx.Button>}/>
 		</div>
 	);
 }

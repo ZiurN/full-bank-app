@@ -82,7 +82,7 @@ export function upddateUserInfoInFirebase ({userInfo, transactionInf}) {
 		let userRef = doc(db, 'users', userInfo.Id);
 		updateDoc(userRef, {balance: userInfo.balance}).then(() => {
 			addDoc(transactionsRef, transactionInf).then(() => {
-				resolve(`Deposit Done!`);
+				resolve(`Operation Done!`);
 			}).catch(error => {console.log(error); reject(error)});
 		}).catch(error => {console.log(error); reject(error)});
 	});
